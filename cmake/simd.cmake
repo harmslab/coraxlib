@@ -26,6 +26,10 @@ endif()
 # only reasonable way to check if a SIMD variant is supported by the whole toolchain is to actually
 # compile small test programs.
 function (check_sse_available)
+    if (CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64|ARM")
+        set(SSE_AVAILABLE FALSE PARENT_SCOPE)
+        return()
+    endif()
     set(TEST_CODE " #include <immintrin.h>
         int main() {__m128d a = _mm_setzero_pd();  return 1;}"
     )
@@ -43,6 +47,10 @@ function (check_sse_available)
 endfunction ()
 
 function (check_avx_available)
+    if (CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64|ARM")
+        set(AVX_AVAILABLE FALSE PARENT_SCOPE)
+        return()
+    endif()
     set(TEST_CODE " #include <immintrin.h>
         int main() {__m256d a = _mm256_setzero_pd ();  return 1;}"
     )
@@ -60,6 +68,10 @@ function (check_avx_available)
 endfunction ()
 
 function (check_avx2_available)
+    if (CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64|ARM")
+        set(AVX2_AVAILABLE FALSE PARENT_SCOPE)
+        return()
+    endif()
     set(TEST_CODE " #include <immintrin.h>
         int main() {__m256i a, b; b =  _mm256_abs_epi16(a); return 1;}"
     )
